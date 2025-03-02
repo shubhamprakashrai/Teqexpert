@@ -43,8 +43,6 @@ class ThemeManager {
 
   /// **Dynamically update theme when system theme changes**
   void updateSystemTheme(Brightness brightness) {
-
-    print("object");
     String? savedTheme = _prefs.getString(_themeKey);
     if (savedTheme == null || savedTheme == 'system') {
       themeNotifier.value = _getThemeFromBrightness(brightness);
