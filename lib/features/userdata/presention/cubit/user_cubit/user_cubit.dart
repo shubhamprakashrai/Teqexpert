@@ -15,6 +15,9 @@ class UserCubit extends Cubit<UserDataState>{
 
   Future<void> fetchUsers() async {
     try {
+      emit(state.copyWith(
+        state: state.loading
+      ));
       var res = await userdataUseCase();
       if(res.statusCode == HttpStatus.ok){
         emit(

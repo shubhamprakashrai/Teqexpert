@@ -2,7 +2,6 @@
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:teqexpert_assingnment/features/userdata/presention/cubit/user_cubit/user_cubit.dart';
 
-
 // class UserScreen extends StatelessWidget {
 //   const UserScreen({super.key});
 
@@ -40,12 +39,10 @@
 //   }
 // }
 
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teqexpert_assingnment/core/Theme/theme_logic_extension/app_theme.dart';
+import 'package:teqexpert_assingnment/core/Theme/theme_logic_extension/theme_provider.dart';
 import 'package:teqexpert_assingnment/features/userdata/presention/cubit/user_cubit/user_cubit.dart';
 
 class UserScreen extends StatefulWidget {
@@ -59,14 +56,28 @@ class _UserScreenState extends State<UserScreen> {
   @override
   void initState() {
     super.initState();
-    // Call API when the page loads
     context.read<UserCubit>().fetchUsers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Users List')),
+      appBar: AppBar(
+        title: const Center(child: Text('Users List')),
+        actions: [
+          ValueListenableBuilder<ThemeData>(
+            valueListenable: ThemeManager().themeNotifier,
+            builder: (context, theme, _) {
+              return Switch(
+                value: theme == AppThemes.darkTheme,
+                onChanged: (value) {
+                  ThemeManager().setTheme(value ? 'dark' : 'light');
+                },
+              );
+            },
+          ),
+        ],
+      ),
       body: BlocBuilder<UserCubit, UserDataState>(
         builder: (context, state) {
           if (state.isLoading) {
@@ -90,7 +101,6 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  /// 🌟 Stylish Card for Users
   Widget _buildUserCard(String title, String body) {
     return Card(
       elevation: 5,
@@ -115,7 +125,6 @@ class _UserScreenState extends State<UserScreen> {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(color: Colors.grey[600]),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
         ),
       ),
     );
